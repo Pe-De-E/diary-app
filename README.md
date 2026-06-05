@@ -9,7 +9,7 @@
 | ~~FR003~~ | ~~React + Vite Setup — Scaffold the app with Vite and use React as the UI framework.~~ | |
 | ~~FR004~~ | ~~TailwindCSS via npm — Install Tailwind through npm and configure it with Vite.~~ | |
 | FR005 | State & Effects Management — Use React hooks (useState, useEffect, etc.) appropriately for UI state and side-effects. | |
-| FR006 | Add Entry Button — Provide an "Add Entry" button that opens an entry-creation modal. Control showing/hiding the modal with state. | |
+| ~~FR006~~ | ~~Add Entry Button — Provide an "Add Entry" button that opens an entry-creation modal. Control showing/hiding the modal with state.~~ | |
 | FR007 | Add Entry Form Fields — Form must collect Title, Date, Image URL, Content. | |
 | FR008 | LocalStorage Persistence — Store diary entries as an array in localStorage. | |
 | FR009 | One-Entry-Per-Day Check — If an entry already exists for the selected day, prompt the user to come back the next day. | |
