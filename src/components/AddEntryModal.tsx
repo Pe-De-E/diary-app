@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import type { DiaryEntry } from '../types'
+
+const STORAGE_KEY = 'diary-entries'
 
 interface AddEntryModalProps {
   onClose: () => void
@@ -11,7 +14,15 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
   const [content, setContent] = useState('')
 
   function handleSubmit() {
-    // TODO: save entry
+    const existing: DiaryEntry[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
+    const newEntry: DiaryEntry = {
+      id: crypto.randomUUID(),
+      title,
+      date,
+      imageUrl,
+      content,
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([newEntry, ...existing]))
     onClose()
   }
 
