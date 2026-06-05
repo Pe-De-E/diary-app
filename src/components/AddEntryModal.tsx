@@ -3,41 +3,86 @@ import type { DiaryEntry } from '../types'
 
 const STORAGE_KEY = 'diary-entries'
 
+interface FormState {
+  date: string
+  title: string
+  imageUrl: string
+  content: string
+  editingId: string | null
+}
+
+function buildFormState(date: string): FormState {
+  const entries: DiaryEntry[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
+  const match = entries.find(e => e.date === date) ?? null
+  return {
+    date,
+    title: match?.title ?? '',
+    imageUrl: match?.imageUrl ?? '',
+    content: match?.content ?? '',
+    editingId: match?.id ?? null,
+  }
+}
+
 interface AddEntryModalProps {
   onClose: () => void
 }
 
 function AddEntryModal({ onClose }: AddEntryModalProps) {
-  const [title, setTitle] = useState('')
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
-  const [imageUrl, setImageUrl] = useState('')
-  const [content, setContent] = useState('')
+  const [form, setForm] = useState<FormState>(() =>
+    buildFormState(new Date().toISOString().split('T')[0])
+  )
+  const [showToast, setShowToast] = useState(() =>
+    buildFormState(new Date().toISOString().split('T')[0]).editingId !== null
+  )
 
-  const isValid = title.trim() !== '' && date !== '' && imageUrl.trim() !== '' && content.trim() !== ''
+  const isValid = form.title.trim() !== '' && form.date !== '' && form.imageUrl.trim() !== '' && form.content.trim() !== ''
+
+  function handleDateChange(newDate: string) {
+    const newForm = buildFormState(newDate)
+    setForm(newForm)
+    setShowToast(newForm.editingId !== null)
+  }
 
   function handleSubmit() {
-    const existing: DiaryEntry[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
-    const newEntry: DiaryEntry = {
-      id: crypto.randomUUID(),
-      title,
-      date,
-      imageUrl,
-      content,
+    const entries: DiaryEntry[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
+
+    if (form.editingId) {
+      const updated = entries.map(e =>
+        e.id === form.editingId
+          ? { ...e, title: form.title, date: form.date, imageUrl: form.imageUrl, content: form.content }
+          : e
+      )
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    } else {
+      const newEntry: DiaryEntry = {
+        id: crypto.randomUUID(),
+        title: form.title,
+        date: form.date,
+        imageUrl: form.imageUrl,
+        content: form.content,
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([newEntry, ...entries]))
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([newEntry, ...existing]))
+
     onClose()
   }
 
   return (
+    <>
+    {showToast && (
+      <div className="toast toast-top toast-center z-50">
+        <div className="alert alert-info flex flex-col items-start gap-1">
+          <span className="font-medium">Für diesen Tag gibt es bereits einen Eintrag.</span>
+          <span className="text-sm">Du kannst ihn jetzt bearbeiten oder morgen wiederkommen.</span>
+          <button className="btn btn-xs btn-ghost self-end" onClick={() => setShowToast(false)}>✕</button>
+        </div>
+      </div>
+    )}
     <dialog className="modal modal-open">
       <div className="modal-box max-w-lg">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-xl">New Diary Entry</h3>
-          <button
-            type="button"
-            className="btn btn-sm btn-circle btn-ghost"
-            onClick={onClose}
-          >
+          <h3 className="font-bold text-xl">{form.editingId ? 'Edit Entry' : 'New Diary Entry'}</h3>
+          <button type="button" className="btn btn-sm btn-circle btn-ghost" onClick={onClose}>
             ✕
           </button>
         </div>
@@ -52,8 +97,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
                 type="text"
                 placeholder="What's on your mind?"
                 className="input input-bordered w-full"
-                value={title}
-                onChange={e => setTitle(e.target.value)}
+                value={form.title}
+                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
               />
             </label>
 
@@ -64,8 +109,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
               <input
                 type="date"
                 className="input input-bordered w-full"
-                value={date}
-                onChange={e => setDate(e.target.value)}
+                value={form.date}
+                onChange={e => handleDateChange(e.target.value)}
               />
             </label>
 
@@ -77,8 +122,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
                 type="url"
                 placeholder="https://..."
                 className="input input-bordered w-full"
-                value={imageUrl}
-                onChange={e => setImageUrl(e.target.value)}
+                value={form.imageUrl}
+                onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))}
               />
             </label>
           </div>
@@ -91,8 +136,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
               className="textarea textarea-bordered leading-relaxed"
               placeholder="Write about your day..."
               rows={5}
-              value={content}
-              onChange={e => setContent(e.target.value)}
+              value={form.content}
+              onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
             />
           </label>
 
@@ -101,13 +146,14 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
               Cancel
             </button>
             <button type="submit" className="btn btn-primary" disabled={!isValid}>
-              Save Entry
+              {form.editingId ? 'Update Entry' : 'Save Entry'}
             </button>
           </div>
         </form>
       </div>
       <div className="modal-backdrop" onClick={onClose} />
     </dialog>
+    </>
   )
 }
 
