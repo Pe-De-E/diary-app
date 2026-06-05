@@ -35,7 +35,7 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
     buildFormState(new Date().toISOString().split('T')[0], entries).editingId !== null
   )
 
-  const isValid = form.title.trim() !== '' && form.date !== '' && form.imageUrl.trim() !== '' && form.content.trim() !== ''
+  const isValid = form.title.trim() !== '' && form.date !== '' && form.content.trim() !== ''
 
   function handleDateChange(newDate: string) {
     const newForm = buildFormState(newDate, entries)
@@ -103,7 +103,7 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
 
               <label className="form-control">
                 <div className="label">
-                  <span className="label-text font-medium">Image URL</span>
+                  <span className="label-text font-medium">Image URL <span className="text-base-content/40 font-normal">(optional)</span></span>
                 </div>
                 <input
                   type="url"
