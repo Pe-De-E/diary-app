@@ -13,6 +13,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
   const [imageUrl, setImageUrl] = useState('')
   const [content, setContent] = useState('')
 
+  const isValid = title.trim() !== '' && date !== '' && imageUrl.trim() !== '' && content.trim() !== ''
+
   function handleSubmit() {
     const existing: DiaryEntry[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
     const newEntry: DiaryEntry = {
@@ -98,7 +100,7 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
             <button type="button" className="btn btn-ghost" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" disabled={!isValid}>
               Save Entry
             </button>
           </div>
