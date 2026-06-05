@@ -1,10 +1,15 @@
+import { DiaryProvider } from './context/DiaryContext'
 import Navbar from './components/Navbar'
+import EntryList from './components/EntryList'
 
 function App() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-    </div>
+    <DiaryProvider>
+      <div className="min-h-screen">
+        <Navbar />
+        <EntryList />
+      </div>
+    </DiaryProvider>
   )
 }
 
