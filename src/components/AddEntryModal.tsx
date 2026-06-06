@@ -66,7 +66,7 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
         </div>
       )}
       <dialog className="modal modal-open">
-        <div className="modal-box max-w-lg">
+        <div className="modal-box max-w-lg bg-white/10 backdrop-blur-xl border border-white/15">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-xl">{form.editingId ? 'Edit Entry' : 'New Diary Entry'}</h3>
             <button type="button" className="btn btn-sm btn-circle btn-ghost" onClick={onClose}>
@@ -129,10 +129,10 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
             </label>
 
             <div className="modal-action mt-2">
-              <button type="button" className="btn btn-ghost" onClick={onClose}>
+              <button type="button" className="btn bg-white/10 hover:bg-white/20 border border-white/20 text-white" onClick={onClose}>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary" disabled={!isValid}>
+              <button type="submit" className="btn bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-0 text-white" disabled={!isValid}>
                 {form.editingId ? 'Update Entry' : 'Save Entry'}
               </button>
             </div>

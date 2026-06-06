@@ -1,2 +1,13 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+body {
+  min-height: 100vh;
+  background-color: #0d0d1a;
+  background-image:
+    radial-gradient(at 15% 15%, hsla(270, 90%, 65%, 0.18) 0px, transparent 55%),
+    radial-gradient(at 85% 8%,  hsla(210, 100%, 60%, 0.14) 0px, transparent 50%),
+    radial-gradient(at 55% 88%, hsla(330, 90%, 62%, 0.16) 0px, transparent 55%),
+    radial-gradient(at 92% 70%, hsla(165, 90%, 55%, 0.1) 0px, transparent 45%);
+  background-attachment: fixed;
+}
