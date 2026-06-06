@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { DiaryEntry } from '../types'
-import { useDiary } from '../context/DiaryContext'
+import { useDiary } from '../hooks/useDiary'
 import EntryDetailModal from './EntryDetailModal'
 
 const FALLBACK_IMAGE = 'https://placehold.co/600x400?text=No+Image'

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { DiaryEntry } from '../types'
-import { useDiary } from '../context/DiaryContext'
+import { useDiary } from '../hooks/useDiary'
 
 interface FormState {
   date: string

@@ -1,4 +1,4 @@
-import { DiaryProvider } from './context/DiaryContext'
+import { DiaryProvider } from './context/diaryContext'
 import Navbar from './components/Navbar'
 import EntryList from './components/EntryList'
 

@@ -1,14 +1,8 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { DiaryEntry } from '../types'
+import { useState, type ReactNode } from 'react'
+import type { DiaryEntry } from '../../types'
+import { DiaryContext } from './context'
 
 const STORAGE_KEY = 'diary-entries'
-
-interface DiaryContextValue {
-  entries: DiaryEntry[]
-  saveEntry: (entry: DiaryEntry) => void
-}
-
-const DiaryContext = createContext<DiaryContextValue | null>(null)
 
 export function DiaryProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<DiaryEntry[]>(() =>
@@ -31,10 +25,4 @@ export function DiaryProvider({ children }: { children: ReactNode }) {
       {children}
     </DiaryContext.Provider>
   )
-}
-
-export function useDiary() {
-  const ctx = useContext(DiaryContext)
-  if (!ctx) throw new Error('useDiary must be used within DiaryProvider')
-  return ctx
 }
