@@ -66,8 +66,14 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
       <dialog className="modal modal-open">
         <div className="modal-box max-w-lg bg-white/10 backdrop-blur-xl border border-white/15">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-bold text-xl">{form.editingId ? 'Edit Entry' : 'New Diary Entry'}</h3>
-            <button type="button" className="btn btn-sm btn-circle btn-ghost" onClick={onClose}>
+            <h3 className="font-bold text-xl text-white">
+              {form.editingId ? 'Edit Entry' : 'New Diary Entry'}
+            </h3>
+            <button
+              type="button"
+              className="btn btn-sm btn-circle bg-white/10 hover:bg-white/20 border border-white/20 text-white"
+              onClick={onClose}
+            >
               ✕
             </button>
           </div>
@@ -75,8 +81,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
           <form onSubmit={(e) => { e.preventDefault(); handleSubmit() }} className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-4">
               <label className="form-control col-span-2">
-                <div className="label">
-                  <span className="label-text font-medium">Title</span>
+                <div className="label pb-2">
+                  <span className="label-text font-medium text-white">Title</span>
                 </div>
                 <input
                   type="text"
@@ -88,8 +94,8 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
               </label>
 
               <label className="form-control">
-                <div className="label">
-                  <span className="label-text font-medium">Date</span>
+                <div className="label pb-2">
+                  <span className="label-text font-medium text-white">Date</span>
                 </div>
                 <input
                   type="date"
@@ -100,8 +106,10 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
               </label>
 
               <label className="form-control">
-                <div className="label">
-                  <span className="label-text font-medium">Image URL <span className="text-base-content/40 font-normal">(optional)</span></span>
+                <div className="label pb-2">
+                  <span className="label-text font-medium text-white">
+                    Image URL <span className="text-white/40 font-normal">(optional)</span>
+                  </span>
                 </div>
                 <input
                   type="url"
@@ -111,26 +119,34 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
                   onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))}
                 />
               </label>
+
+              <label className="form-control col-span-2">
+                <div className="label pb-2">
+                  <span className="label-text font-medium text-white">Content</span>
+                </div>
+                <textarea
+                  className="textarea textarea-bordered leading-relaxed w-full"
+                  placeholder="Write about your day..."
+                  rows={5}
+                  value={form.content}
+                  onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+                />
+              </label>
             </div>
 
-            <label className="form-control">
-              <div className="label">
-                <span className="label-text font-medium">Content</span>
-              </div>
-              <textarea
-                className="textarea textarea-bordered leading-relaxed"
-                placeholder="Write about your day..."
-                rows={5}
-                value={form.content}
-                onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-              />
-            </label>
-
             <div className="modal-action mt-2">
-              <button type="button" className="btn bg-white/10 hover:bg-white/20 border border-white/20 text-white" onClick={onClose}>
+              <button
+                type="button"
+                className="btn bg-white/10 hover:bg-white/20 border border-white/20 text-white"
+                onClick={onClose}
+              >
                 Cancel
               </button>
-              <button type="submit" className="btn bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-0 text-white" disabled={!isValid}>
+              <button
+                type="submit"
+                className="btn bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-0 text-white disabled:opacity-40 disabled:cursor-not-allowed disabled:from-purple-500 disabled:to-pink-500"
+                disabled={!isValid}
+              >
                 {form.editingId ? 'Update Entry' : 'Save Entry'}
               </button>
             </div>
