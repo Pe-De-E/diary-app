@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { DiaryEntry } from '../types'
 import { useDiary } from '../hooks/useDiary'
+import Toast from './Toast'
 
 interface FormState {
   date: string
@@ -56,15 +57,12 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
 
   return (
     <>
-      {showToast && (
-        <div className="toast toast-top toast-center z-50">
-          <div className="alert alert-info flex flex-col items-start gap-1">
-            <span className="font-medium">Für diesen Tag gibt es bereits einen Eintrag.</span>
-            <span className="text-sm">Du kannst ihn jetzt bearbeiten oder morgen wiederkommen.</span>
-            <button className="btn btn-xs btn-ghost self-end" onClick={() => setShowToast(false)}>✕</button>
-          </div>
-        </div>
-      )}
+      <Toast
+        show={showToast}
+        message="Für diesen Tag gibt es bereits einen Eintrag."
+        description="Du kannst ihn jetzt bearbeiten oder morgen wiederkommen."
+        onClose={() => setShowToast(false)}
+      />
       <dialog className="modal modal-open">
         <div className="modal-box max-w-lg bg-white/10 backdrop-blur-xl border border-white/15">
           <div className="flex items-center justify-between mb-6">
