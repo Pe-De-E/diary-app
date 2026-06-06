@@ -1,4 +1,7 @@
+import { useState } from 'react'
+import type { DiaryEntry } from '../types'
 import { useDiary } from '../context/DiaryContext'
+import EntryDetailModal from './EntryDetailModal'
 
 const FALLBACK_IMAGE = 'https://placehold.co/600x400?text=No+Image'
 
@@ -12,6 +15,7 @@ function formatDate(dateStr: string) {
 
 function EntryList() {
   const { entries } = useDiary()
+  const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null)
 
   const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date))
 
@@ -28,28 +32,34 @@ function EntryList() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
-      {sorted.map(entry => (
-        <div
-          key={entry.id}
-          className="card bg-base-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden"
-        >
-          <div className="h-52 overflow-hidden bg-base-200">
-            <img
-              src={entry.imageUrl || FALLBACK_IMAGE}
-              alt={entry.title}
-              className="w-full h-full object-cover"
-              onError={e => { e.currentTarget.src = FALLBACK_IMAGE }}
-            />
+    <>
+      {selectedEntry && (
+        <EntryDetailModal entry={selectedEntry} onClose={() => setSelectedEntry(null)} />
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
+        {sorted.map(entry => (
+          <div
+            key={entry.id}
+            className="card bg-base-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden"
+            onClick={() => setSelectedEntry(entry)}
+          >
+            <div className="h-52 overflow-hidden bg-base-200">
+              <img
+                src={entry.imageUrl || FALLBACK_IMAGE}
+                alt={entry.title}
+                className="w-full h-full object-cover"
+                onError={e => { e.currentTarget.src = FALLBACK_IMAGE }}
+              />
+            </div>
+            <div className="card-body gap-1 p-5">
+              <div className="badge badge-ghost text-xs">{formatDate(entry.date)}</div>
+              <h2 className="card-title text-base mt-1">{entry.title}</h2>
+              <p className="text-sm text-base-content/60 line-clamp-2 mt-1">{entry.content}</p>
+            </div>
           </div>
-          <div className="card-body gap-1 p-5">
-            <div className="badge badge-ghost text-xs">{formatDate(entry.date)}</div>
-            <h2 className="card-title text-base mt-1">{entry.title}</h2>
-            <p className="text-sm text-base-content/60 line-clamp-2 mt-1">{entry.content}</p>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   )
 }
 
