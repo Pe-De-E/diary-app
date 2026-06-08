@@ -35,6 +35,7 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
   const [showToast, setShowToast] = useState(() =>
     buildFormState(new Date().toISOString().split('T')[0], entries).editingId !== null
   )
+  const [imageValid, setImageValid] = useState(false)
 
   const isValid = form.title.trim() !== '' && form.date !== '' && form.content.trim() !== ''
 
@@ -116,8 +117,26 @@ function AddEntryModal({ onClose }: AddEntryModalProps) {
                   placeholder="https://..."
                   className="input input-bordered w-full"
                   value={form.imageUrl}
-                  onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))}
+                  onChange={e => { setForm(f => ({ ...f, imageUrl: e.target.value })); setImageValid(false) }}
                 />
+                {form.imageUrl && imageValid && (
+                  <div className="mt-2 h-28 rounded-lg overflow-hidden border border-white/10">
+                    <img
+                      src={form.imageUrl}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {form.imageUrl && !imageValid && (
+                  <img
+                    src={form.imageUrl}
+                    alt=""
+                    className="hidden"
+                    onLoad={() => setImageValid(true)}
+                    onError={() => setImageValid(false)}
+                  />
+                )}
               </label>
 
               <label className="form-control col-span-2">
